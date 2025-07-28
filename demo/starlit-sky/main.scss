@@ -1,0 +1,71 @@
+body {
+    background-color: #1b1a1a;
+}
+
+.content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 40px;
+    font-weight: 300;
+    letter-spacing: 10px;
+    font-family: 'Microsoft YaHei', sans-serif;
+    // 字体渐变
+    background: linear-gradient(to bottom, #e9e4e4, #464444);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+// 创建阴影，即星空中的星星
+@function createShadow($n) {
+    $shadow: '#{random(100)}vw #{random(100)}vh #fff';
+
+    @for $i from 2 through $n {
+        $shadow: '#{$shadow}, #{random(100)}vw #{random(100)}vh #fff';
+    }
+
+    // 去除引号
+    @return unquote($shadow);
+}
+
+// 设置基准数量和时间
+$count: 1000;
+$time: 400;
+
+@for $i from 1 through 3 {
+    $count: floor($count / 2);
+    $time: floor($time / 2);
+
+    .layout#{$i} {
+        $size: #{$i}px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: $size;
+        height: $size;
+        border-radius: 50%;
+        box-shadow: createShadow($count);
+        animation: moveUp #{$time}s linear infinite;
+        // 创建子元素，实现无缝衔接
+        &::after {
+            content: '';
+            position: absolute;
+            top: 100vh;
+            left: 0;
+            width: inherit;
+            height: inherit;
+            border-radius: inherit;
+            box-shadow: inherit;
+        }
+    }
+}
+
+@keyframes moveUp {
+    100% {
+        transform: translateY(-100vh);
+    }
+}
